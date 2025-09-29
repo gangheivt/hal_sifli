@@ -131,9 +131,9 @@ __weak int bf0_enable_pll(uint32_t freq, uint8_t type)// need updata drv_audcode
     uint32_t fc_vco;
     uint32_t fc_vco_min;
     uint32_t fc_vco_max;
-    uint32_t delta_cnt=0;
-    uint32_t delta_cnt_min=0;
-    uint32_t delta_cnt_max=0;
+    uint32_t delta_cnt = 0;
+    uint32_t delta_cnt_min = 0;
+    uint32_t delta_cnt_max = 0;
     uint32_t delta_fc_vco;
     uint32_t target_cnt = 1838;
 
@@ -878,7 +878,7 @@ __HAL_ROM_USED HAL_StatusTypeDef HAL_AUDCODEC_Config_RChanel(AUDCODEC_HandleType
                                          (0x7 << AUDCODEC_ADC_CH0_CFG_HPF_COEF_Pos) |
                                          (0   << AUDCODEC_ADC_CH0_CFG_STB_INV_Pos) |
                                          (0   << AUDCODEC_ADC_CH0_CFG_DMA_EN_Pos) |
-                                         (0xc << AUDCODEC_ADC_CH0_CFG_ROUGH_VOL_Pos) |
+                                         (0xa << AUDCODEC_ADC_CH0_CFG_ROUGH_VOL_Pos) |
                                          (0   << AUDCODEC_ADC_CH0_CFG_FINE_VOL_Pos) |
                                          (1   << AUDCODEC_ADC_CH0_CFG_DATA_FORMAT_Pos); //16bit
         //hacodec->Instance->ADC_CH0_CFG = 0x10ABD;
@@ -890,7 +890,7 @@ __HAL_ROM_USED HAL_StatusTypeDef HAL_AUDCODEC_Config_RChanel(AUDCODEC_HandleType
                                          (0xf << AUDCODEC_ADC_CH0_CFG_HPF_COEF_Pos) |
                                          (0   << AUDCODEC_ADC_CH0_CFG_STB_INV_Pos) |
                                          (0   << AUDCODEC_ADC_CH0_CFG_DMA_EN_Pos) |
-                                         (0xc << AUDCODEC_ADC_CH0_CFG_ROUGH_VOL_Pos) |
+                                         (0xa << AUDCODEC_ADC_CH0_CFG_ROUGH_VOL_Pos) |
                                          (0   << AUDCODEC_ADC_CH0_CFG_FINE_VOL_Pos) |
                                          (1   << AUDCODEC_ADC_CH0_CFG_DATA_FORMAT_Pos);  //16bit
         break;
@@ -1035,13 +1035,13 @@ __HAL_ROM_USED HAL_StatusTypeDef HAL_AUDCODEC_Config_ADCPath_Volume(AUDCODEC_Han
         return HAL_ERROR;
     }
 
-    if ((volume < -36) || (volume > 54))
+    if ((volume < -60) || (volume > 30))
     {
         return HAL_ERROR;
     }
 
-    rough_vol = (volume + 36) / 6;
-    fine_vol  = ((volume + 36) % 6) << 1;
+    rough_vol = (volume + 60) / 6;
+    fine_vol  = ((volume + 60) % 6) << 1;
 
     if (channel == 0)
     {
@@ -1124,6 +1124,7 @@ __HAL_ROM_USED HAL_StatusTypeDef HAL_AUDCODEC_Mute_DACPath(AUDCODEC_HandleTypeDe
 
     if (mute)
     {
+        HAL_AUDCODEC_Config_DACPath(hacodec, 1);
         fine_vol_0 = GET_REG_VAL(hacodec->Instance->DAC_CH0_CFG, AUDCODEC_DAC_CH0_CFG_FINE_VOL_Msk, AUDCODEC_DAC_CH0_CFG_FINE_VOL_Pos);
         fine_vol_1 = GET_REG_VAL(hacodec->Instance->DAC_CH1_CFG, AUDCODEC_DAC_CH1_CFG_FINE_VOL_Msk, AUDCODEC_DAC_CH1_CFG_FINE_VOL_Pos);
         MODIFY_REG(hacodec->Instance->DAC_CH0_CFG,  AUDCODEC_DAC_CH0_CFG_FINE_VOL_Msk, \
@@ -1133,6 +1134,7 @@ __HAL_ROM_USED HAL_StatusTypeDef HAL_AUDCODEC_Mute_DACPath(AUDCODEC_HandleTypeDe
     }
     else
     {
+        HAL_AUDCODEC_Config_DACPath(hacodec, 0);
         MODIFY_REG(hacodec->Instance->DAC_CH0_CFG,  AUDCODEC_DAC_CH0_CFG_FINE_VOL_Msk, \
                    MAKE_REG_VAL(fine_vol_0, AUDCODEC_DAC_CH0_CFG_FINE_VOL_Msk, AUDCODEC_DAC_CH0_CFG_FINE_VOL_Pos));
         MODIFY_REG(hacodec->Instance->DAC_CH1_CFG,  AUDCODEC_DAC_CH1_CFG_FINE_VOL_Msk, \
