@@ -2,10 +2,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
-#include "sf32lb52_lcpu.h"
-#include "sf32lb52_lcpu_patch.h"
 #include "bf0_hal.h"
 #include "mem_map.h"
+
+#ifdef SF32LB_LCPU_PATCH
+#include "sf32lb52_lcpu.h"
+#include "sf32lb52_lcpu_patch.h"
 
 /* Install Bluetooth core (LCPU) image*/
 void lcpu_img_install()
@@ -48,3 +50,16 @@ uint32_t *HAL_PATCH_GetEntryAddr(void)
         entry_addr = (uint32_t *)LCPU_PATCH_RECORD_ADDR;
     return entry_addr;
 }
+
+#else
+
+void lcpu_patch_install()
+{
+}
+
+void lcpu_patch_install_rev_b()
+{
+}
+
+#endif
+
