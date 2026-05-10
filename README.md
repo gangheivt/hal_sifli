@@ -48,7 +48,7 @@ License Link:
 
 Patch List:
 
-- None
+- Add SF32LB52x LL headers under `ll/sf32lb52x`.
 
 ## Updating
 

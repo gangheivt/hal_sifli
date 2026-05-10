@@ -10,7 +10,7 @@ if [ -z "$SIFLI_SDK" ]; then
 	exit 1
 fi
 
-rm -rf cmsis hal ipc_queue
+rm -rf cmsis hal ipc_queue ll
 
 # HAL drivers
 mkdir hal
@@ -21,6 +21,14 @@ cp -r $SIFLI_SDK/drivers/hal hal/src
 rm -rf \
 	hal/src/SConscript \
 	hal/src/*.sym
+
+# LL headers
+mkdir ll
+cp -r $SIFLI_SDK/drivers/ll/sf32lb52x ll/
+
+# Remove LL unwanted files
+rm -rf \
+	ll/sf32lb52x/SConscript
  
 mkdir ipc_queue
 cp -r $SIFLI_SDK/middleware/ipc_queue/common ipc_queue/common
